@@ -1,1 +1,0 @@
-declare module "ghostscript-js"

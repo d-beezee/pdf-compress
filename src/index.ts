@@ -1,10 +1,11 @@
+import { spawn } from 'child_process';
 import dotenv from 'dotenv';
 import express, { Express, Request, Response } from 'express';
 import fs from "fs";
-import gs from "ghostscript-js";
 import multer from 'multer';
 import tmp from "tmp";
 import { isValidPDF } from "./gs";
+
 
 dotenv.config();
 
@@ -34,11 +35,10 @@ app.post('/', multer().any(), async (req: Request, res: Response) => {
 
   const tmpFile = tmp.fileSync()
 
-  const tmpFileOut = tmp.fileSync()
 
   fs.appendFileSync(tmpFile.fd, file);
 
-  gs.exec([
+  const processpdf = spawn('gs', [
     '-q',
     '-dNOPAUSE',
     '-dBATCH',
@@ -46,19 +46,18 @@ app.post('/', multer().any(), async (req: Request, res: Response) => {
     '-sDEVICE=pdfwrite',
     '-dCompatibilityLevel=1.4',
     '-dPDFSETTINGS=/ebook',
-    '-sOutputFile=' + tmpFileOut.name,
+    '-sOutputFile=-',
     tmpFile.name
-  ], (codeError: any) => {
+  ])
+
+  processpdf.stdout.on("data", function (data) {
+    res.write(data)
+  })
+
+  processpdf.on('exit', function (code) {
+    if (code) console.log('child process exited with code ' + code.toString());
     tmpFile.removeCallback()
-    if (codeError) {
-      console.log(codeError)
-      tmpFileOut.removeCallback()
-      res.send('Error');
-    } else {
-      const data = fs.readFileSync(tmpFileOut.name)
-      tmpFileOut.removeCallback()
-      res.send(data);
-    }
+    res.end()
   });
 });
 
