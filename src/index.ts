@@ -2,9 +2,9 @@ import dotenv from 'dotenv';
 import express, { Express, Request, Response } from 'express';
 import fs from "fs";
 import gs from "ghostscript-js";
-import { isValidPDF } from "ghostscript-node";
 import multer from 'multer';
 import tmp from "tmp";
+import { isValidPDF } from "./gs";
 
 dotenv.config();
 
@@ -16,7 +16,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
 
-app.post('/', multer().any(), async(req: Request, res: Response) => {
+app.post('/', multer().any(), async (req: Request, res: Response) => {
   if (!req.query || !req.query.key || req.query.key != process.env.KEY) {
     res.status(403).send("Invalid key");
     return
@@ -33,11 +33,11 @@ app.post('/', multer().any(), async(req: Request, res: Response) => {
   }
 
   const tmpFile = tmp.fileSync()
-  
+
   const tmpFileOut = tmp.fileSync()
 
   fs.appendFileSync(tmpFile.fd, file);
-  
+
   gs.exec([
     '-q',
     '-dNOPAUSE',
