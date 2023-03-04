@@ -1,12 +1,22 @@
 import dotenv from 'dotenv';
 import express, { Express, Request, Response } from 'express';
+import multer from 'multer';
 
 dotenv.config();
 
 const app: Express = express();
+
 const port = process.env.PORT;
 
 app.get('/', (req: Request, res: Response) => {
+  res.send('Express + TypeScript Server');
+});
+
+app.post('/', multer().any(), (req: Request, res: Response) => {
+  if (!req.query || !req.query.key || req.query.key != process.env.KEY) {
+    res.status(403).send("Invalid key");
+    return
+  }
   res.send('Express + TypeScript Server');
 });
 
