@@ -27,8 +27,6 @@ COPY --from=node /usr/local/bin /usr/local/bin
 
 COPY --from=base /dist /app/build
 COPY package*.json /app/
-COPY --from=base /.git/HEAD /app/.git/HEAD
-COPY --from=base /.git/refs /app/.git/refs
 WORKDIR /app
 RUN apk add yarn
 RUN yarn --prod --ignore-scripts
