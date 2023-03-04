@@ -4,7 +4,7 @@
     },
     "files": [
       "src/index.ts",
-      "src/types.d.ts",
+      "src/index.d.ts",
     ],
     "compilerOptions": {
       "inlineSourceMap": true,
