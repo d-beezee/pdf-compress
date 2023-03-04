@@ -1,0 +1,26 @@
+{
+  "name": "pdf-compress",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "repository": "https://github.com/d-beezee/pdf-compress.git",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn clean && yarn transpile",
+    "transpile": "tsc --noEmit false && tsc-alias",
+    "clean": "rimraf dist",
+    "start": "tsnd --respawn -r tsconfig-paths/register  --transpile-only  ./src/index.ts"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^18.14.6",
+    "ts-node": "^10.9.1",
+    "ts-node-dev": "^2.0.0",
+    "tsc-alias": "^1.8.2",
+    "tsconfig-paths": "^3.14.2",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  }
+}
