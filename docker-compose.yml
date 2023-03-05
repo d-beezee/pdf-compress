@@ -1,0 +1,9 @@
+version: "3.9"
+services:
+  web:
+    image: "davidebizzi/pdf-compress"
+    ports:
+      - "80:3000"
+    restart: always
+    env_file:
+      - .env
