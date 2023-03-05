@@ -17,6 +17,8 @@ export default async (req: Request, res: Response) => {
         return
     }
 
+    console.log("Working on " + files[0].originalname)
+
     const tmpFile = tmp.fileSync()
 
 
